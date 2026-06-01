@@ -8,6 +8,9 @@ services:
     build: .
     image: hindsight:latest
     stop_grace_period: 45s
+    env_file:
+      - path: .env
+        required: false
     ports:
       - "8888:8888"
       - "9999:9999"
