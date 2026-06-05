@@ -7,6 +7,7 @@ services:
   hindsight:
     build: .
     image: hindsight:latest
+    user: "${HINDSIGHT_CONTAINER_UID:-1000}:${HINDSIGHT_CONTAINER_GID:-1000}"
     stop_grace_period: 45s
     env_file:
       - path: .env
@@ -15,6 +16,8 @@ services:
       - "8888:8888"
       - "9999:9999"
     environment:
+      HOME: /home/hindsight
+      HF_HOME: /home/hindsight/.cache/huggingface
       HINDSIGHT_API_LLM_PROVIDER: "${HINDSIGHT_API_LLM_PROVIDER:-llamacpp}"
       HINDSIGHT_API_LLM_MODEL: "${HINDSIGHT_API_LLM_MODEL:-gpt-oss-20b}"
       HINDSIGHT_API_RETAIN_LLM_PROVIDER: "${HINDSIGHT_API_RETAIN_LLM_PROVIDER:-llamacpp}"

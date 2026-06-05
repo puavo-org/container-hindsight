@@ -14,15 +14,10 @@ chmod 666 "$HOME/.hindsight/models/llamacpp_server.log"
 curl -L \
   -o "$HOME/.hindsight/models/gpt-oss-20b-mxfp4.gguf" \
   "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/main/gpt-oss-20b-mxfp4.gguf"
-
-docker run --rm --user root \
-  -v "$HOME/.hindsight:/mnt" \
-  --entrypoint sh ghcr.io/vectorize-io/hindsight:latest \
-  -lc 'chown -R 1000:1000 /mnt/data /mnt/cache /mnt/models'
 ```
 
-The last command makes the bind-mounted directories writable by the
-`hindsight` user inside the container.
+The generated `.env` records your host UID/GID so the container can write to
+the bind-mounted directories without changing their ownership.
 
 ## Generating the environment
 

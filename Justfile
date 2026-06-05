@@ -6,6 +6,8 @@ _default:
 
 llamacpp:
     @printf '%s\n' \
+        "HINDSIGHT_CONTAINER_UID=$(id -u)" \
+        "HINDSIGHT_CONTAINER_GID=$(id -g)" \
         'HINDSIGHT_API_LLM_PROVIDER=llamacpp' \
         'HINDSIGHT_API_LLM_MODEL=gpt-oss-20b' \
         'HINDSIGHT_API_RETAIN_LLM_PROVIDER=llamacpp' \
@@ -26,6 +28,8 @@ llamacpp:
 
 openrouter $OPENROUTER_API_KEY=env_var('OPENROUTER_API_KEY'):
     @printf '%s\n' \
+        "HINDSIGHT_CONTAINER_UID=$(id -u)" \
+        "HINDSIGHT_CONTAINER_GID=$(id -g)" \
         'HINDSIGHT_API_LLM_PROVIDER=openrouter' \
         "HINDSIGHT_API_LLM_API_KEY=$OPENROUTER_API_KEY" \
         'HINDSIGHT_API_LLM_MODEL=openai/gpt-oss-20b' \
