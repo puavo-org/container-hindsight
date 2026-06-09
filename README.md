@@ -1,25 +1,9 @@
 # Hindsight container
 
-## Preparation
-
-```
-mkdir -p \
-  "$HOME/.hindsight/data" \
-  "$HOME/.hindsight/cache" \
-  "$HOME/.hindsight/models"
-
-touch "$HOME/.hindsight/models/llamacpp_server.log"
-chmod 666 "$HOME/.hindsight/models/llamacpp_server.log"
-
-curl -L \
-  -o "$HOME/.hindsight/models/gpt-oss-20b-mxfp4.gguf" \
-  "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/main/gpt-oss-20b-mxfp4.gguf"
-```
-
-The generated `.env` records your host UID/GID so the container can write to
-the bind-mounted directories without changing their ownership.
-
 ## Generating the environment
+
+The environment generation recipes also prepare the bind-mounted directories and
+download the llama.cpp model if it does not already exist.
 
 ```bash
 just llamacpp

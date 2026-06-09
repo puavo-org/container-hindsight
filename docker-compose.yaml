@@ -5,9 +5,12 @@ name: hindsight
 
 services:
   hindsight:
-    build: .
+    build:
+      context: .
+      args:
+        HINDSIGHT_CONTAINER_UID: "${HINDSIGHT_CONTAINER_UID:-1000}"
+        HINDSIGHT_CONTAINER_GID: "${HINDSIGHT_CONTAINER_GID:-1000}"
     image: hindsight:latest
-    user: "${HINDSIGHT_CONTAINER_UID:-1000}:${HINDSIGHT_CONTAINER_GID:-1000}"
     stop_grace_period: 45s
     env_file:
       - path: .env
@@ -17,6 +20,8 @@ services:
       - "9999:9999"
     environment:
       HOME: /home/hindsight
+      LOGNAME: hindsight
+      USER: hindsight
       HF_HOME: /home/hindsight/.cache/huggingface
       HINDSIGHT_API_LLM_PROVIDER: "${HINDSIGHT_API_LLM_PROVIDER:-llamacpp}"
       HINDSIGHT_API_LLM_MODEL: "${HINDSIGHT_API_LLM_MODEL:-gpt-oss-20b}"

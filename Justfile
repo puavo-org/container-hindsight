@@ -4,7 +4,7 @@
 _default:
     @just --list
 
-llamacpp:
+llamacpp: init
     @printf '%s\n' \
         "HINDSIGHT_CONTAINER_UID=$(id -u)" \
         "HINDSIGHT_CONTAINER_GID=$(id -g)" \
@@ -26,7 +26,7 @@ llamacpp:
         'HINDSIGHT_API_ENABLE_OBSERVATIONS=true' \
         'HINDSIGHT_API_WORKER_ID=hindsight-local' > .env
 
-openrouter $OPENROUTER_API_KEY=env_var('OPENROUTER_API_KEY'):
+openrouter $OPENROUTER_API_KEY=env_var('OPENROUTER_API_KEY'): init
     @printf '%s\n' \
         "HINDSIGHT_CONTAINER_UID=$(id -u)" \
         "HINDSIGHT_CONTAINER_GID=$(id -g)" \
@@ -44,3 +44,18 @@ openrouter $OPENROUTER_API_KEY=env_var('OPENROUTER_API_KEY'):
         'HINDSIGHT_API_LLM_TIMEOUT=300' \
         'HINDSIGHT_API_ENABLE_OBSERVATIONS=true' \
         'HINDSIGHT_API_WORKER_ID=hindsight-local' > .env
+
+[private]
+init:
+    mkdir -p \
+        "$HOME/.hindsight/data" \
+        "$HOME/.hindsight/cache" \
+        "$HOME/.hindsight/models"
+    test -w "$HOME/.hindsight/data" || { printf '%s\n' 'Run: sudo chown -R $(id -u):$(id -g) "$HOME/.hindsight"'; exit 1; }
+    test -w "$HOME/.hindsight/cache" || { printf '%s\n' 'Run: sudo chown -R $(id -u):$(id -g) "$HOME/.hindsight"'; exit 1; }
+    test -w "$HOME/.hindsight/models" || { printf '%s\n' 'Run: sudo chown -R $(id -u):$(id -g) "$HOME/.hindsight"'; exit 1; }
+    touch "$HOME/.hindsight/models/llamacpp_server.log"
+    chmod 666 "$HOME/.hindsight/models/llamacpp_server.log"
+    test -f "$HOME/.hindsight/models/gpt-oss-20b-mxfp4.gguf" || curl -L \
+        -o "$HOME/.hindsight/models/gpt-oss-20b-mxfp4.gguf" \
+        "https://huggingface.co/ggml-org/gpt-oss-20b-GGUF/resolve/main/gpt-oss-20b-mxfp4.gguf"
